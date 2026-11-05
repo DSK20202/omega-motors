@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GAMOS - Landing Page</title>
+    <style>
+      body {
+        margin: 0;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100dvh;
+        background: #000000;
+        color: #fff;
+        overflow: hidden;
+      }
+
+      /* Vidéo parfaitement responsive sur tous les écrans (largeur et hauteur) */
+      video {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100dvh;
+        object-fit: cover;
+        z-index: -1;
+        filter: brightness(0.65);
+      }
+
+      .content {
+        text-align: center;
+        z-index: 1;
+      }
+
+      /* Animation et style du titre */
+      h1 {
+        font-size: 3.5rem;
+        letter-spacing: 5px;
+        margin-bottom: 25px;
+        opacity: 0;
+        transform: translateY(-20px);
+        animation: fadeInDown 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      }
+
+      /* Conteneur des boutons */
+      .buttons {
+        margin-top: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        opacity: 0;
+        transform: translateY(20px);
+        animation: fadeInUp 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.5s forwards;
+      }
+
+      /* Boutons principaux au style Glassmorphism */
+      .buttons a {
+        text-decoration: none;
+        color: #fff;
+        background: rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        padding: 14px 30px;
+        border-radius: 50px;
+        font-size: 16px;
+        font-weight: 600;
+        letter-spacing: 1px;
+        transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        text-align: center;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      }
+
+      .buttons a:hover {
+        background: rgba(255, 255, 255, 0.28);
+        border-color: rgba(255, 255, 255, 0.6);
+        transform: translateY(-3px);
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+      }
+
+      /* Bouton de son optionnel (Glassmorphism discret) */
+      .sound-btn {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        background: rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        color: #fff;
+        padding: 10px 18px;
+        border-radius: 30px;
+        font-size: 14px;
+        font-weight: 500;
+        cursor: pointer;
+        z-index: 10;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.35s ease;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+      }
+
+      .sound-btn:hover {
+        background: rgba(255, 255, 255, 0.28);
+        border-color: rgba(255, 255, 255, 0.6);
+        transform: scale(1.05);
+      }
+
+      /* Animations fluides */
+      @keyframes fadeInDown {
+        from { opacity: 0; transform: translateY(-20px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+
+      @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Vidéo d'arrière-plan -->
+    <video id="bg-video" autoplay muted playsinline>
+      <source src="pz.mp4" type="video/mp4" />
+      Your browser does not support the video tag.
+    </video>
+
+    <!-- Bouton de son -->
+    <button id="soundToggle" class="sound-btn">
+      <span id="soundIcon">🔇</span> 
+    </button>
+
+    <div class="content">
+      <h1>GAMOS</h1>
+      <div class="buttons">
+        <a href="por.html">Se connecter</a>
+        <a href="creeruncompte.html">Créer un compte</a>
+      </div>
+    </div>
+
+    <script>
+      const video = document.getElementById('bg-video');
+      const soundBtn = document.getElementById('soundToggle');
+      const soundIcon = document.getElementById('soundIcon');
+
+      // Gestion du son
+      soundBtn.addEventListener('click', () => {
+        if (video.muted) {
+          video.muted = false;
+          video.volume = 1.0;
+          soundIcon.textContent = '🔊';
+        } else {
+          video.muted = true;
+          soundIcon.textContent = '🔇';
+        }
+      });
+
+      // Correction pour relancer la vidéo lorsqu'on revient sur la page via le bouton "Retour" du navigateur
+      window.addEventListener('pageshow', (event) => {
+        if (event.persisted) {
+          video.currentTime = 0;
+          video.play().catch(() => {});
+        }
+      });
+    </script>
+  </body>
+</html>

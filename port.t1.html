@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Créer un identifiant - Porsche ID</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            display: flex;
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+            background-color: #000;
+            position: relative;
+        }
+
+        /* Conteneur de l'image en arrière-plan */
+        .background-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .background-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+        }
+
+        /* Bouton Retour vers por.html */
+        .back-button {
+            position: absolute;
+            top: 25px;
+            left: 25px;
+            text-decoration: none;
+            color: #fff;
+            background: rgba(0, 0, 0, 0.4);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            transition: background 0.2s;
+            z-index: 3;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .back-button:hover {
+            background: rgba(0, 0, 0, 0.7);
+        }
+
+        /* Conteneur principal pour centrer le cadre */
+        .main-container {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 15px;
+        }
+
+        /* Cadre en verre translucide (Glassmorphism) au format portrait */
+        .glass-card {
+            width: 100%;
+            max-width: 440px;
+            max-height: 90vh;
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            border-radius: 24px;
+            padding: 30px 25px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            overflow-y: auto;
+        }
+
+        /* En-tête Porsche parfaitement centré */
+        .header {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .porsche-logo {
+            font-weight: 900;
+            letter-spacing: 4px;
+            font-size: 15px;
+            color: #fff;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        /* Titre sur une seule ligne */
+        h1 {
+            font-size: 16px;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 12px;
+            line-height: 1.2;
+            text-align: center;
+            white-space: nowrap;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+        }
+
+        .description {
+            font-size: 11px;
+            color: #f1f1f1;
+            margin-bottom: 15px;
+            line-height: 1.3;
+            text-align: center;
+        }
+
+        .input-group {
+            margin-bottom: 12px;
+        }
+
+        label {
+            display: block;
+            font-size: 11px;
+            color: #f1f1f1;
+            margin-bottom: 4px;
+            font-weight: 500;
+        }
+
+        input[type="email"],
+        input[type="text"],
+        select {
+            width: 100%;
+            padding: 10px 12px;
+            background-color: rgba(255, 255, 255, 0.35);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: 8px;
+            font-size: 13px;
+            color: #000;
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        select {
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+            background-size: 14px;
+        }
+
+        input::placeholder {
+            color: rgba(0, 0, 0, 0.4);
+        }
+
+        input:focus, select:focus {
+            border-color: #fff;
+            background-color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* Checkbox termes */
+        .terms-group {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            margin: 12px 0;
+            font-size: 11px;
+            color: #f1f1f1;
+        }
+
+        .terms-group input {
+            margin-top: 2px;
+        }
+
+        .terms-group a {
+            color: #fff;
+            text-decoration: underline;
+        }
+
+        .legal-text {
+            font-size: 10px;
+            color: #e0e0e0;
+            margin-bottom: 15px;
+            line-height: 1.3;
+        }
+
+        .legal-text a {
+            color: #fff;
+            text-decoration: underline;
+        }
+
+        /* Bouton Continuer */
+        .btn-continue {
+            width: 100%;
+            padding: 12px;
+            background-color: #000;
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        .btn-continue:hover {
+            background-color: #222;
+        }
+
+        /* Responsive pour mobiles */
+        @media (max-width: 480px) {
+            .glass-card {
+                padding: 20px 15px;
+                max-height: 95vh;
+            }
+            h1 {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+
+    
+    
+
+    <!-- Image de la voiture en arrière-plan -->
+    <div class="background-container">
+        <img src="PO.jpg" alt="Porsche Arrière-plan">[cite: 3]
+    </div>
+
+    <!-- Bouton de retour vers por.html -->
+    <a href="nav.por.html" class="back-button">
+        &#8592; Retour
+    </a>
+
+    <!-- Conteneur centré -->
+    <div class="main-container">
+        <div class="glass-card">
+            <div>
+                <!-- En-tête -->
+                <div class="header">
+                    <div class="porsche-logo">OMEGA</div>
+                </div>
+
+                <!-- Titre et description -->
+                <h1>Créez votre identifiant OMEGA</h1>
+                <div class="description">
+                    L'identifiant Porsche est votre clé pour accéder à des services Porsche exclusifs, tous accessibles avec un seul compte.
+                </div>
+
+                <form>
+                    
+                    <form>
+                    <div class="input-group">
+                        <label for="country">Pays</label>
+                        <select id="country">
+                            <option value="AF">Afghanistan</option>
+                            <option value="ZA">Afrique du Sud</option>
+                            <option value="AL">Albanie</option>
+                            <option value="DZ">Algérie</option>
+                            <option value="DE">Allemagne</option>
+                            <option value="AD">Andorre</option>
+                            <option value="AO">Angola</option>
+                            <option value="AG">Antigua-et-Barbuda</option>
+                            <option value="SA">Arabie saoudite</option>
+                            <option value="AR">Argentine</option>
+                            <option value="AM">Arménie</option>
+                            <option value="AU">Australie</option>
+                            <option value="AT">Autriche</option>
+                            <option value="AZ">Azerbaïdjan</option>
+                            <option value="BS">Bahamas</option>
+                            <option value="BH">Bahreïn</option>
+                            <option value="BD">Bangladesh</option>
+                            <option value="BB">Barbade</option>
+                            <option value="BE" selected>Belgique</option>
+                            <option value="BZ">Belize</option>
+                            <option value="BJ">Bénin</option>
+                            <option value="BT">Bhoutan</option>
+                            <option value="BY">Biélorussie</option>
+                            <option value="MM">Birmanie</option>
+                            <option value="BO">Bolivie</option>
+                            <option value="BA">Bosnie-Herzégovine</option>
+                            <option value="BW">Botswana</option>
+                            <option value="BR">Brésil</option>
+                            <option value="BN">Brunei</option>
+                            <option value="BG">Bulgarie</option>
+                            <option value="BF">Burkina Faso</option>
+                            <option value="BI">Burundi</option>
+                            <option value="KH">Cambodge</option>
+                            <option value="CM">Cameroun</option>
+                            <option value="CA">Canada</option>
+                            <option value="CV">Cap-Vert</option>
+                            <option value="CF">Centrafrique</option>
+                            <option value="CL">Chili</option>
+                            <option value="CN">Chine</option>
+                            <option value="CY">Chypre</option>
+                            <option value="CO">Colombie</option>
+                            <option value="KM">Comores</option>
+                            <option value="CG">Congo-Brazzaville</option>
+                            <option value="CD">Congo-Kinshasa</option>
+                            <option value="KR">Corée du Sud</option>
+                            <option value="KP">Corée du Nord</option>
+                            <option value="CR">Costa Rica</option>
+                            <option value="CI">Côte d'Ivoire</option>
+                            <option value="HR">Croatie</option>
+                            <option value="CU">Cuba</option>
+                            <option value="DK">Danemark</option>
+                            <option value="DJ">Djibouti</option>
+                            <option value="DM">Dominique</option>
+                            <option value="EG">Égypte</option>
+                            <option value="AE">Émirats arabes unis</option>
+                            <option value="EC">Équateur</option>
+                            <option value="ER">Érythrée</option>
+                            <option value="ES">Espagne</option>
+                            <option value="EE">Estonie</option>
+                            <option value="US">États-Unis</option>
+                            <option value="ET">Éthiopie</option>
+                            <option value="FJ">Fidji</option>
+                            <option value="FI">Finlande</option>
+                            <option value="FR">France</option>
+                            <option value="GA">Gabon</option>
+                            <option value="GM">Gambie</option>
+                            <option value="GE">Géorgie</option>
+                            <option value="GH">Ghana</option>
+                            <option value="GR">Grèce</option>
+                            <option value="GD">Grenade</option>
+                            <option value="GT">Guatemala</option>
+                            <option value="GN">Guinée</option>
+                            <option value="GQ">Guinée équatoriale</option>
+                            <option value="GW">Guinée-Bissau</option>
+                            <option value="GY">Guyana</option>
+                            <option value="HT">Haïti</option>
+                            <option value="HN">Honduras</option>
+                            <option value="HU">Hongrie</option>
+                            <option value="IN">Inde</option>
+                            <option value="ID">Indonésie</option>
+                            <option value="IQ">Irak</option>
+                            <option value="IR">Iran</option>
+                            <option value="IE">Irlande</option>
+                            <option value="IS">Islande</option>
+                            <option value="IL">Israël</option>
+                            <option value="IT">Italie</option>
+                            <option value="JM">Jamaïque</option>
+                            <option value="JP">Japon</option>
+                            <option value="JO">Jordanie</option>
+                            <option value="KZ">Kazakhstan</option>
+                            <option value="KE">Kenya</option>
+                            <option value="KG">Kirghizistan</option>
+                            <option value="KI">Kiribati</option>
+                            <option value="KW">Koweït</option>
+                            <option value="LA">Laos</option>
+                            <option value="LS">Lesotho</option>
+                            <option value="LV">Lettonie</option>
+                            <option value="LB">Liban</option>
+                            <option value="LR">Liberia</option>
+                            <option value="LY">Libye</option>
+                            <option value="LI">Liechtenstein</option>
+                            <option value="LT">Lituanie</option>
+                            <option value="LU">Luxembourg</option>
+                            <option value="MK">Macédoine du Nord</option>
+                            <option value="MG">Madagascar</option>
+                            <option value="MY">Malaisie</option>
+                            <option value="MW">Malawi</option>
+                            <option value="MV">Maldives</option>
+                            <option value="ML">Mali</option>
+                            <option value="MT">Malte</option>
+                            <option value="MA">Maroc</option>
+                            <option value="MU">Maurice</option>
+                            <option value="MR">Mauritanie</option>
+                            <option value="MX">Mexique</option>
+                            <option value="FM">Micronésie</option>
+                            <option value="MD">Moldavie</option>
+                            <option value="MC">Monaco</option>
+                            <option value="MN">Mongolie</option>
+                            <option value="ME">Monténégro</option>
+                            <option value="MZ">Mozambique</option>
+                            <option value="NA">Namibie</option>
+                            <option value="NR">Nauru</option>
+                            <option value="NP">Népal</option>
+                            <option value="NI">Nicaragua</option>
+                            <option value="NE">Niger</option>
+                            <option value="NG">Nigeria</option>
+                            <option value="NO">Norvège</option>
+                            <option value="NZ">Nouvelle-Zélande</option>
+                            <option value="OM">Oman</option>
+                            <option value="UG">Ouganda</option>
+                            <option value="UZ">Ouzbékistan</option>
+                            <option value="PK">Pakistan</option>
+                            <option value="PW">Palaos</option>
+                            <option value="PS">Palestine</option>
+                            <option value="PA">Panama</option>
+                            <option value="PG">Papouasie-Nouvelle-Guinée</option>
+                            <option value="PY">Paraguay</option>
+                            <option value="NL">Pays-Bas</option>
+                            <option value="PE">Pérou</option>
+                            <option value="PH">Philippines</option>
+                            <option value="PL">Pologne</option>
+                            <option value="PT">Portugal</option>
+                            <option value="QA">Qatar</option>
+                            <option value="RO">Roumanie</option>
+                            <option value="GB">Royaume-Uni</option>
+                            <option value="RU">Russie</option>
+                            <option value="RW">Rwanda</option>
+                            <option value="KN">Saint-Christophe-et-Niévès</option>
+                            <option value="SM">Saint-Marin</option>
+                            <option value="VC">Saint-Vincent-et-les-Grenadines</option>
+                            <option value="LC">Sainte-Lucie</option>
+                            <option value="SB">Salomon</option>
+                            <option value="WS">Samoa</option>
+                            <option value="ST">Sao Tomé-et-Principe</option>
+                            <option value="SN">Sénégal</option>
+                            <option value="RS">Serbie</option>
+                            <option value="SC">Seychelles</option>
+                            <option value="SL">Sierra Leone</option>
+                            <option value="SG">Singapour</option>
+                            <option value="SK">Slovaquie</option>
+                            <option value="SI">Slovénie</option>
+                            <option value="SO">Somalie</option>
+                            <option value="SD">Soudan</option>
+                            <option value="SS">Soudan du Sud</option>
+                            <option value="LK">Sri Lanka</option>
+                            <option value="SE">Suède</option>
+                            <option value="CH">Suisse</option>
+                            <option value="SR">Suriname</option>
+                            <option value="SY">Syrie</option>
+                            <option value="TJ">Tadjikistan</option>
+                            <option value="TZ">Tanzanie</option>
+                            <option value="TD">Tchad</option>
+                            <option value="CZ">Tchéquie</option>
+                            <option value="TH">Thaïlande</option>
+                            <option value="TL">Timor oriental</option>
+                            <option value="TG">Togo</option>
+                            <option value="TO">Tonga</option>
+                            <option value="TT">Trinité-et-Tobago</option>
+                            <option value="TN">Tunisie</option>
+                            <option value="TM">Turkménistan</option>
+                            <option value="TR">Turquie</option>
+                            <option value="TV">Tuvalu</option>
+                            <option value="UA">Ukraine</option>
+                            <option value="UY">Uruguay</option>
+                            <option value="VU">Vanuatu</option>
+                            <option value="VA">Vatican</option>
+                            <option value="VE">Venezuela</option>
+                            <option value="VN">Viêt Nam</option>
+                            <option value="YE">Yémen</option>
+                            <option value="ZM">Zambie</option>
+                            <option value="ZW">Zimbabwe</option>
+                        </select>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="email">Adresse e-mail </label>
+                        <input type="email" id="email" placeholder="exemple@domain.com" required>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="civility">civilité </label>
+                        <select id="civility" required>
+                            <option value="" disabled selected>Sélectionner</option>
+                            <option value="m">Monsieur</option>
+                            <option value="mme">Madame</option>
+                        </select>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="firstname">Prénom </label>
+                        <input type="text" id="firstname" required>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="lastname">Nom </label> 
+                        <input type="text" id="lastname" required>
+                    </div>
+
+                    <div class="terms-group">
+                        <input type="checkbox" id="terms" required>
+                        <label for="terms" style="display:inline; font-size:11px;">J'ai pris connaissance des <a href="#">Conditions générales</a> et j'en accepte les termes. *</label>[cite: 3]
+                    </div>
+
+                    <div class="legal-text">
+                        Vous trouverez de plus amples informations concernant vos données à caractère personnel dans notre <a href="#">Déclaration de confidentialité</a>.[cite: 3]
+                    </div>
+
+                    <button type="submit" class="btn-continue">Continuer</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
